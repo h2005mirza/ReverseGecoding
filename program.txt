@@ -1,0 +1,39 @@
+import urllib.request, urllib.parse, urllib.error
+import json
+
+api_key = "68e8243e45d7478a90466dbdd85dde68"
+base_url = "https://api.geoapify.com/v1/geocode/reverse"
+longitude = input("Enter the longitude: ")
+latitude = input("Enter the latitude: ")
+params = {
+    'lon': longitude,
+    'lat': latitude,
+    'apiKey': api_key
+}
+
+url = base_url + '?'+ urllib.parse.urlencode(params)
+response = urllib.request.urlopen(url)
+data = response.read().decode()
+json_data = json.loads(data)
+
+if 'features' in json_data and len(json_data['features']):
+    properties = json_data['features'][0]['properties']
+    address = properties.get('formatted', 'address not found!')
+    state = properties.get('state', 'state not found')
+    county = properties.get('county', 'county not found')
+    country = properties.get('country', 'country not found')
+    zipcode = properties.get('postcode', 'zipcode not found')
+    timezone = properties.get('timezone', 'timezone not found')
+    street = properties.get('street', 'street not found')
+
+    print(f"ADDRESS: {address}")
+    print(f"STATE: {state}")
+    print(f"COUNTY: {county}")
+    print(f"COUNTRY: {country}")
+    print(f"ZIPCODE: {zipcode}")
+    print(f"TIMEZONE: {timezone}")
+    print(F"STREET: {street}")
+
+else:
+    print("No Features Found!")
+
